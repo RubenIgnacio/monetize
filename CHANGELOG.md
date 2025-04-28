@@ -1,5 +1,7 @@
 # Changelog
 
+Change for test
+
 ## 1.13.0
 - **Breaking change**: check ISO currency code validity when parsing strings with `to_money`
 - Adds `expect_whole_subunits` option when fractional subunits are expected
