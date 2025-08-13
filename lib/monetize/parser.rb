@@ -72,7 +72,7 @@ module Monetize
 
       num = input.gsub(/(?:^#{currency.symbol}|[^\d.,'-]+)/, '')
 
-      negative, num = extract_sign(num)
+      sign, num = extract_sign(num)
 
       num.chop! if num =~ /[\.|,]$/
 
@@ -80,7 +80,7 @@ module Monetize
 
       amount = to_big_decimal(num)
       amount = apply_multiplier(multiplier_exp, amount)
-      amount = apply_sign(negative, amount)
+      amount = sign * amount
 
       [amount, currency]
     end
@@ -123,10 +123,6 @@ module Monetize
 
     def apply_multiplier(multiplier_exp, amount)
       amount * 10**multiplier_exp
-    end
-
-    def apply_sign(negative, amount)
-      negative ? amount * -1 : amount
     end
 
     def compute_currency_from_iso_code
@@ -214,7 +210,7 @@ module Monetize
     end
 
     def extract_sign(input)
-      result = (input =~ /^-+(.*)$/ || input =~ /^(.*)-+$/) ? [true, $1] : [false, input]
+      result = (input =~ /^-+(.*)$/ || input =~ /^(.*)-+$/) ? [-1, $1] : [1, input]
       fail ParseError, 'Invalid amount (hyphen)' if result[1].include?('-')
       result
     end
