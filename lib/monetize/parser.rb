@@ -217,9 +217,12 @@ module Monetize
 
     def split_major_minor(num, delimiter)
       splits = num.split(delimiter)
+
       fail ParseError, 'Invalid amount (multiple delimiters)' if splits.length > 2
 
-      [splits[0], splits[1] || '00']
+      splits[1] = '00' if splits.length == 1
+
+      splits
     end
   end
 end
